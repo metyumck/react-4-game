@@ -1,0 +1,23 @@
+//Base styles for react 4 game
+
+body {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+  font-weight: 300;
+}
+
+h1 {
+  font-weight:300;
+  text-transform:uppercase;
+}
+
+.generate {
+  text-align: center;
+
+  p {
+    padding:20px;
+  }
+  .board-link {
+    padding: 20px;
+    width:500px;
+  }
+}

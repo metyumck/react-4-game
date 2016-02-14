@@ -1,0 +1,7 @@
+{
+  "generator-react-webpack": {
+    "appName": "reactFourGame",
+    "style": "sass",
+    "postcss": false
+  }
+}
