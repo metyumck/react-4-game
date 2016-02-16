@@ -7,8 +7,8 @@ class GenerateBoard extends React.Component {
   
   constructor() {
     super();
-    this.defaultBoard = {
-      row1: {
+    this.defaultBoard = [
+      {
         column1: 0,
         column2: 0,
         column3: 0,
@@ -17,7 +17,7 @@ class GenerateBoard extends React.Component {
         column6: 0,
         column7: 0
       },
-      row2: {
+      {
         column1: 0,
         column2: 0,
         column3: 0,
@@ -26,7 +26,7 @@ class GenerateBoard extends React.Component {
         column6: 0,
         column7: 0
       },
-      row3: {
+      {
         column1: 0,
         column2: 0,
         column3: 0,
@@ -35,7 +35,7 @@ class GenerateBoard extends React.Component {
         column6: 0,
         column7: 0
       },
-      row4: {
+      {
         column1: 0,
         column2: 0,
         column3: 0,
@@ -44,7 +44,7 @@ class GenerateBoard extends React.Component {
         column6: 0,
         column7: 0
       },
-      row5: {
+      {
         column1: 0,
         column2: 0,
         column3: 0,
@@ -53,7 +53,7 @@ class GenerateBoard extends React.Component {
         column6: 0,
         column7: 0
       },
-      row6: {
+      {
         column1: 0,
         column2: 0,
         column3: 0,
@@ -63,7 +63,7 @@ class GenerateBoard extends React.Component {
         column7: 0
       }
 
-    }
+    ]
 
   }
 
