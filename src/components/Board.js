@@ -25,14 +25,32 @@ class Board extends React.Component {
     });
   }
 
-  componentDidUpdate() {
-    
+  testPlayerView() {
+    var hash;
+    var that = this;
+    new FPJS2().get(function (results, components) {
+      hash = results;
+      that.base.fetch('/boards/' + that.props.params.boardId + '/players/playerone', {
+        context: that,
+        then(data) {
+          if (hash == data) {
+            that.setState({
+              playerView: 1
+            });
+          } else {
+            that.setState({
+              playerView: 2
+            });
+          }
+        }
+      })
+    });
   }
 
   getRow(row, index) {
 
     return (
-      <div key={index} className='row'>
+      <div key={index} className='row' onClick={this.testPlayerView.bind(this)}>
         <BoardCell key={index + '1'} cellRow={index} cellOwner={row['column1']} cellColumn='1' board={this.props.params.boardId}/>
         <BoardCell key={index + '2'} cellRow={index} cellOwner={row['column2']} cellColumn='2' board={this.props.params.boardId}/>
         <BoardCell key={index + '3'} cellRow={index} cellOwner={row['column3']} cellColumn='3' board={this.props.params.boardId}/>
@@ -46,10 +64,10 @@ class Board extends React.Component {
 
   render() {
     var that = this;
-    console.log(this.state.board);
+    console.log(this.state.playerView);
     return (
       <div>
-        <div className="hide">test</div>
+        <div className={this.state.playerView == 1 ? 'player-info pink' : 'player-info blue'}>{this.state.playerView == 1 ? <h2>You are pink!</h2> : <h2>You are blue!</h2>}</div>
         <div>
           <ChooseColor boardid={this.props.params.boardId}/>
           <div className="react-4-board">
