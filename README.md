@@ -3,8 +3,10 @@
 
 ## How do I play?
 
-- Go here:
+(Full game features currently unfinished)
+
+- For the moment, clone the repository, run npm install, then npm run serve
 - Click the "Make me a board" button
-- Send the link to a friend.
+- To test, send the link to another browser on your computer or network.
 - The game will wait till you and your friend pick colours and then...
 - Play!
