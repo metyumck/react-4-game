@@ -82,7 +82,12 @@ class GenerateBoard extends React.Component {
     var that = this;
     this.setState({generatedBoard: this.base.push('/boards', {
         data: {
-          board: this.defaultBoard
+          board: this.defaultBoard,
+          linkSent: false,
+          players: {
+            playerone: false,
+            playertwo: false
+          }
         },
         then() {
           that.setLink();
@@ -107,10 +112,10 @@ class GenerateBoard extends React.Component {
     return (
       <div>
         <div className="generate">
-          <h1>Make a Board</h1>
+          <h1>Make a board.</h1>
           <p>Click the button below to create a board,
-             then send the link to the person you want to play with. Note:
-             in order for the game to remember who you are, please play
+             then send the link to the person you want to play with.</p>
+          <p><span className="note">Note: </span>In order for the game to remember who you are, please play
              from the browser that you initially start playing on.</p>
           {this.state.showButton ? <button onClick={this.handleClick.bind(this)}>Make me a board!</button> : null }
           <br /><a href={this.state.boardLink}>{this.state.boardLink}</a>

@@ -1,5 +1,6 @@
 import React from 'react';
 import Rebase from 're-base';
+import FPJS2 from 'fingerprintjs2';
 
 class BoardCell extends React.Component {
 
@@ -27,6 +28,11 @@ class BoardCell extends React.Component {
   }
 
   handleClick(e) {
+
+    new FPJS2().get(function (results, components) {
+      console.log("hash " + results);
+    });
+
     e.preventDefault();
     this.base = Rebase.createClass('https://react-4-game.firebaseio.com');
     if (this.validateMove()) {

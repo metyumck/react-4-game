@@ -64,6 +64,8 @@
   },
   "dependencies": {
     "core-js": "^2.0.0",
+    "fingerprintjs2": "^1.1.0",
+    "node-neat": "^1.7.2",
     "normalize.css": "^3.0.3",
     "re-base": "^1.5.1",
     "react": "^0.14.0",

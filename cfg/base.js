@@ -59,7 +59,7 @@ module.exports = {
       },
       {
         test: /\.scss/,
-        loader: 'style-loader!css-loader!sass-loader?outputStyle=expanded'
+        loader: 'style-loader!css-loader!sass-loader?includePaths[]=' + require('node-bourbon').includePaths + '&includePaths[]=' + require('node-neat').includePaths[1] + '?outputStyle=expanded'
       },
       {
         test: /\.less/,

@@ -1,14 +1,17 @@
 import React from 'react';
 import Rebase from 're-base';
+import FPJS2 from 'fingerprintjs2';
 
 import BoardCell from './BoardCell.js';
+import ChooseColor from './ChooseColor.js';
 
 class Board extends React.Component {
   
   constructor() {
     super();
     this.state = {
-      board: []
+      board: [],
+      playerOneView: false
 
     }
   }
@@ -20,8 +23,10 @@ class Board extends React.Component {
       state: 'board',
       asArray: true
     });
+  }
 
-
+  componentDidUpdate() {
+    
   }
 
   getRow(row, index) {
@@ -44,8 +49,9 @@ class Board extends React.Component {
     console.log(this.state.board);
     return (
       <div>
+        <div className="hide">test</div>
         <div>
-          <p>Hi, you are looking at board: {this.props.params.boardId}</p>
+          <ChooseColor boardid={this.props.params.boardId}/>
           <div className="react-4-board">
             {this.state.board.map(that.getRow, that)}
           </div>
