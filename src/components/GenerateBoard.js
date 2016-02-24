@@ -73,12 +73,17 @@ class GenerateBoard extends React.Component {
     this.state = {
       generatedBoard: undefined,
       boardLink: undefined,
-      showButton: true
+      showButton: true,
+      loading: false
     };
   }
 
   handleClick(e) {
     e.preventDefault();
+    this.setState({
+      showButton: false,
+      loading: true
+    });
     var that = this;
     this.setState({generatedBoard: this.base.push('/boards', {
         data: {
@@ -87,7 +92,8 @@ class GenerateBoard extends React.Component {
           players: {
             playerone: false,
             playertwo: false
-          }
+          },
+          lockedToPlayer: 0 
         },
         then() {
           that.setLink();
@@ -101,10 +107,8 @@ class GenerateBoard extends React.Component {
 
   setLink() {
     this.setState({
-      boardLink: window.location + 'board/' + this.state.generatedBoard.toString().split('boards/')[1]
-    });
-    this.setState({
-      showButton: false
+      boardLink: window.location + 'board/' + this.state.generatedBoard.toString().split('boards/')[1],
+      loading:false
     });
   }
 
@@ -118,7 +122,7 @@ class GenerateBoard extends React.Component {
           <p><span className="note">Note: </span>In order for the game to remember who you are, please play
              from the browser that you initially start playing on.</p>
           {this.state.showButton ? <button onClick={this.handleClick.bind(this)}>Make me a board!</button> : null }
-          <br /><a href={this.state.boardLink}>{this.state.boardLink}</a>
+          <br />{this.state.loading ? <span className="spinner"><img src="/images/loading_spinner.gif"/></span> : <a href={this.state.boardLink}>{this.state.boardLink}</a>}
         </div>
       </div>
     );

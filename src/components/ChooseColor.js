@@ -9,7 +9,8 @@ class ChooseColor extends React.Component {
     this.state = {
       linkSent: false,
       playerOneFP: undefined,
-      playerTwoFP: undefined
+      playerTwoFP: undefined,
+      showAlreadyChosenMessage: false
     }
   }
 
@@ -54,13 +55,27 @@ class ChooseColor extends React.Component {
     new FPJS2().get(function (results, components) {
       console.log("hash " + results);
       hash = results;
-      that.base.post('/boards/' + that.props.boardid + '/players/playertwo', {
-        data: hash,
-        then() {
-          console.log('blue player has been assigned');
-        }
+      if (hash == that.state.playerOneFP) {
+        that.setState({
+          showAlreadyChosenMessage:true
+        });
+        return;
+      } else {
+        that.base.post('/boards/' + that.props.boardid + '/players/playertwo', {
+          data: hash,
+          then() {
+            if (that.state.playerTwoFP != undefined) {
+              that.base.post('/boards/' + that.props.boardid + '/lockedToPlayer', {
+                data: 1,
+                then() {
+                  console.log('game is live! pink player goes first');
+                }
+              });
+            }
+          }
 
-      });
+        });
+      }
 
     });
   }
@@ -72,13 +87,27 @@ class ChooseColor extends React.Component {
     new FPJS2().get(function (results, components) {
       console.log("hash " + results);
       hash = results;
-      that.base.post('/boards/' + that.props.boardid + '/players/playerone', {
-        data: hash,
-        then() {
-          console.log('pink player has been assigned');
-        }
+      if (hash == that.state.playerTwoFP) {
+        that.setState({
+          showAlreadyChosenMessage:true
+        });
+        return;
+      } else {
+        that.base.post('/boards/' + that.props.boardid + '/players/playerone', {
+          data: hash,
+          then() {
+            if (that.state.playerTwoFP != undefined) {
+              that.base.post('/boards/' + that.props.boardid + '/lockedToPlayer', {
+                data: 1,
+                then() {
+                  console.log('game is live! pink player goes first');
+                }
+              });
+            }
+          }
 
-      });
+        });
+      }
 
     });
     
@@ -97,6 +126,7 @@ class ChooseColor extends React.Component {
         	<p>Choose your colour! (Game starts when both players have chosen)</p>
           {!this.state.playerOneFP ? <span className="choice choice-pink" onClick={this.handlePinkChoiceClick.bind(this)}></span> : null }
           {!this.state.playerTwoFP ? <span className="choice choice-blue" onClick={this.handleBlueChoiceClick.bind(this)}></span> : null } 
+          <p className={this.state.showAlreadyChosenMessage ? 'alert' : 'hide' }>You have already chosen a colour!</p>
         </div>
       </div>
     );

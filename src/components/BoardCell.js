@@ -12,13 +12,40 @@ class BoardCell extends React.Component {
       then(data) {
         cellU = data;
       }
-    })
+    });
 
+    var lockedToPlayer;
+    this.base.fetch('/boards/' + this.props.board + '/lockedToPlayer', {
+      context: this,
+      then(data) {
+        lockedToPlayer = data;
+      }
+    });
+    
+    var moverCanMove = false;
+    var that = this;
+    new FPJS2().get(function (results, components) {
+      var moverHash = results;
+      that.base.fetch('/boards/' + that.props.board + '/players/', {
+        context: that,
+        then(data) {
+          console.log(components);
+          if (data.playerone.toString() == moverHash.toString() && lockedToPlayer == 1) {
+            moverCanMove = true;
+          } else if (parseInt(data.playertwo) == moverHash && lockedToPlayer == 2) {
+            moverCanMove = true;
+          }
+
+          
+        }
+      });
+      
+    });
     //check the cellOwner is not 1 or 2
     //check that the circle beneath is not equal to 0
-    if (this.props.cellOwner == 0 && this.props.cellRow == 5) {
+    if (this.props.cellOwner == 0 && this.props.cellRow == 5 && moverCanMove) {
       return true;
-    } else if (this.props.cellOwner == 0 && cellU == 1 || cellU == 2) {
+    } else if (this.props.cellOwner == 0 && (cellU == 1 || cellU == 2) && moverCanMove) {
       return true
     }
 
@@ -28,10 +55,6 @@ class BoardCell extends React.Component {
   }
 
   handleClick(e) {
-
-    new FPJS2().get(function (results, components) {
-      console.log("hash " + results);
-    });
 
     e.preventDefault();
     this.base = Rebase.createClass('https://react-4-game.firebaseio.com');

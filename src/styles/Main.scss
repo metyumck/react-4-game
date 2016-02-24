@@ -39,7 +39,7 @@ img {
 }
 
 .logo-divider {
-  height:40px;
+  min-height:40px;
   background-color:#252525;
   text-align: center;
   p {
@@ -49,8 +49,18 @@ img {
   }
 }
 
+.spinner {
+  img {
+    width:50px;
+  }
+}
+
 .hide {
   display:none;
+}
+
+.alert {
+  color:red;
 }
 
 .player-info {
@@ -117,42 +127,59 @@ img {
 
 
 .react-4-board {
-  text-align: center;
+  @include outer-container(100%);
   background-color:#e0e0e0;
   padding:30px;
   border:4px dashed #575757;
   border-radius: 20px;
   margin:20px;
-}
-
-
-
-.row {
-
-  display:inline-block;
-  margin:0px auto;
-  .cell {
-    border-radius:50%;
-    display:inline-block;
-    border:1px solid black;
-    height:100px;
-    width:100px;
-    margin:5px;
+  text-align: center;
+  .row {
+    .cell {
+      border-radius:50%;
+      display:inline-block;
+      border:1px solid black;
+      height:50px;
+      width:50px;
+      margin:5px;
+      
+    }
     
-  }
 
-  .cell.owner0 {
-    background-color:#f0f0f0;
-  }
-  .cell.owner1 {
-    background-color: #20c1ff;
-  }
+    @include media(max-width 769px) {
+      .cell {
+        height:35px;
+        width:35px;
+      }
+    }
+    @include media(max-width 501px) {
+      .cell {
+        height:28px;
+        width:28px;
+      }
+    }
+    @include span-columns(12);
+    display:inline-block;
+    margin:0px auto;
+    
 
-  .cell.owner2 {
-    background-color: #f44f98;
-  }
+    .cell.owner0 {
+      background-color:#f0f0f0;
+    }
+    .cell.owner1 {
+      background-color: #20c1ff;
+    }
 
+    .cell.owner2 {
+      background-color: #f44f98;
+    }
+
+  }
 }
+
+
+
+
 
 .generate {
   box-shadow: inset 0 0 1px #575757, 0 2px 4px darken(#f8f8f8, 30%);

@@ -11,7 +11,7 @@ class Board extends React.Component {
     super();
     this.state = {
       board: [],
-      playerOneView: false
+      playerView: 0
 
     }
   }
@@ -23,21 +23,32 @@ class Board extends React.Component {
       state: 'board',
       asArray: true
     });
+
+
+
   }
 
   testPlayerView() {
+    //write a class that returns details from the players browser (details that don' change)
+    //the has the. We want to simple be able to return 
+    
+  }
+
+
+  //deprecated in favour of a more simple method
+  testPlayerViewOld() {
     var hash;
     var that = this;
     new FPJS2().get(function (results, components) {
       hash = results;
-      that.base.fetch('/boards/' + that.props.params.boardId + '/players/playerone', {
+      that.base.fetch('/boards/' + that.props.params.boardId + '/players/', {
         context: that,
         then(data) {
-          if (hash == data) {
+          if (hash == data.playerone) {
             that.setState({
               playerView: 1
             });
-          } else {
+          } else if (hash == data.playertwo) {
             that.setState({
               playerView: 2
             });
@@ -67,8 +78,8 @@ class Board extends React.Component {
     console.log(this.state.playerView);
     return (
       <div>
-        <div className={this.state.playerView == 1 ? 'player-info pink' : 'player-info blue'}>{this.state.playerView == 1 ? <h2>You are pink!</h2> : <h2>You are blue!</h2>}</div>
-        <div>
+        {this.state.playerView != 0 ? <div className={this.state.playerView == 1 ? 'player-info pink' : 'player-info blue'}></div> : null}
+        <div className="board-container">
           <ChooseColor boardid={this.props.params.boardId}/>
           <div className="react-4-board">
             {this.state.board.map(that.getRow, that)}
