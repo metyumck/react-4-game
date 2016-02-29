@@ -1,6 +1,6 @@
 import React from 'react';
 import Rebase from 're-base';
-import FPJS2 from 'fingerprintjs2';
+import IdentifierCreator from '../utility/IdentifierCreator';
 
 class ChooseColor extends React.Component {
   
@@ -52,7 +52,7 @@ class ChooseColor extends React.Component {
     e.preventDefault();
     var that = this;
     var hash;
-    new FPJS2().get(function (results, components) {
+    new IdentifierCreator().convertBrowserComponents(function (results) {
       console.log("hash " + results);
       hash = results;
       if (hash == that.state.playerOneFP) {
@@ -84,7 +84,7 @@ class ChooseColor extends React.Component {
     e.preventDefault();
     var that = this;
     var hash;
-    new FPJS2().get(function (results, components) {
+    new IdentifierCreator().convertBrowserComponents(function (results) {
       console.log("hash " + results);
       hash = results;
       if (hash == that.state.playerTwoFP) {

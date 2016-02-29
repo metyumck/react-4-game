@@ -1,6 +1,6 @@
 import React from 'react';
 import Rebase from 're-base';
-import FPJS2 from 'fingerprintjs2';
+import IdentifierCreator from '../utility/IdentifierCreator';
 
 import BoardCell from './BoardCell.js';
 import ChooseColor from './ChooseColor.js';
@@ -29,33 +29,31 @@ class Board extends React.Component {
   }
 
   testPlayerView() {
-    //write a class that returns details from the players browser (details that don' change)
-    //the has the. We want to simple be able to return 
-    
-  }
-
-
-  //deprecated in favour of a more simple method
-  testPlayerViewOld() {
     var hash;
     var that = this;
-    new FPJS2().get(function (results, components) {
+    new IdentifierCreator().convertBrowserComponents(function (results) {
       hash = results;
       that.base.fetch('/boards/' + that.props.params.boardId + '/players/', {
         context: that,
         then(data) {
-          if (hash == data.playerone) {
+          if (hash.toString() == data.playerone) {
             that.setState({
               playerView: 1
             });
-          } else if (hash == data.playertwo) {
+          } else if (hash.toString() == data.playertwo) {
             that.setState({
               playerView: 2
             });
           }
         }
       })
-    });
+    }); 
+  }
+
+
+  //deprecated in favour of a more simple method
+  testPlayerViewOld() {
+    
   }
 
   getRow(row, index) {

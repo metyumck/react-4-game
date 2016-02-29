@@ -1,6 +1,6 @@
 import React from 'react';
 import Rebase from 're-base';
-import FPJS2 from 'fingerprintjs2';
+import IdentifierCreator from '../utility/IdentifierCreator';
 
 class BoardCell extends React.Component {
 
@@ -24,13 +24,12 @@ class BoardCell extends React.Component {
     
     var moverCanMove = false;
     var that = this;
-    new FPJS2().get(function (results, components) {
+    new IdentifierCreator().convertBrowserComponents(function (results) {
       var moverHash = results;
       that.base.fetch('/boards/' + that.props.board + '/players/', {
         context: that,
         then(data) {
-          console.log(components);
-          if (data.playerone.toString() == moverHash.toString() && lockedToPlayer == 1) {
+          if (parseInt(data.playerone) == moverHash && lockedToPlayer == 1) {
             moverCanMove = true;
           } else if (parseInt(data.playertwo) == moverHash && lockedToPlayer == 2) {
             moverCanMove = true;
