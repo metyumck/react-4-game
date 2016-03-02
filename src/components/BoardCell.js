@@ -4,7 +4,12 @@ import IdentifierCreator from '../utility/IdentifierCreator';
 
 class BoardCell extends React.Component {
 
-  validateMove() {
+  componentDidMount() {
+    this.base = Rebase.createClass('https://react-4-game.firebaseio.com');
+  }
+
+  handleClick(e) {
+    e.preventDefault();
     //get the cell underneath
     var cellU;
     this.base.fetch('/boards/' + this.props.board + '/board/' + (parseInt(this.props.cellRow) + 1) + '/column' + this.props.cellColumn, {
@@ -22,7 +27,6 @@ class BoardCell extends React.Component {
       }
     });
     
-    var moverCanMove = false;
     var that = this;
     new IdentifierCreator().convertBrowserComponents(function (results) {
       var moverHash = results;
@@ -30,9 +34,11 @@ class BoardCell extends React.Component {
         context: that,
         then(data) {
           if (parseInt(data.playerone) == moverHash && lockedToPlayer == 1) {
-            moverCanMove = true;
+            that.executeMove(true, 1, cellU);
           } else if (parseInt(data.playertwo) == moverHash && lockedToPlayer == 2) {
-            moverCanMove = true;
+            that.executeMove(true, 2, cellU);
+          } else {
+            that.executeMove(false);
           }
 
           
@@ -40,31 +46,44 @@ class BoardCell extends React.Component {
       });
       
     });
-    //check the cellOwner is not 1 or 2
-    //check that the circle beneath is not equal to 0
-    if (this.props.cellOwner == 0 && this.props.cellRow == 5 && moverCanMove) {
-      return true;
-    } else if (this.props.cellOwner == 0 && (cellU == 1 || cellU == 2) && moverCanMove) {
-      return true
-    }
-
-    return false;
+    
 
     
   }
 
-  handleClick(e) {
+  executeMove(moverCanMove, mover, cellU) {
+    //check the cellOwner is not 1 or 2
+    //check that the circle beneath is not equal to 0
+    var that = this;
 
-    e.preventDefault();
-    this.base = Rebase.createClass('https://react-4-game.firebaseio.com');
-    if (this.validateMove()) {
-      
+    if (this.props.cellOwner == 0 && (this.props.cellRow == 5 || (cellU == 1 || cellU == 2)) && moverCanMove) {
       this.base.post('/boards/' + this.props.board + '/board/' + this.props.cellRow + '/column' + this.props.cellColumn, {
-        data: 1
-      })
+        data: mover,
+        then() {
+          that.lockToPlayer(mover);
+          that.updateLastMove(mover);
+        }
+      });
+    } else {
+      console.log("move was denied");
     }
+    
   }
- 
+
+  lockToPlayer(mover) {
+    var newLock = mover == 1 ? 2 : 1;
+    this.base.post('/boards/' + this.props.board + '/lockedToPlayer', {
+      data: newLock
+    });
+
+  }
+
+  updateLastMove(mover) {
+    this.base.post('/boards/' + this.props.board + '/lastCellTaken', {
+      data: mover.toString() + this.props.cellRow + this.props.cellColumn
+    });
+  } 
+
   render() {
     var classNames = 'cell owner' + this.props.cellOwner;
     return (

@@ -93,7 +93,8 @@ class GenerateBoard extends React.Component {
             playerone: false,
             playertwo: false
           },
-          lockedToPlayer: 0 
+          lockedToPlayer: 0,
+          lastCellTaken: 0 
         },
         then() {
           that.setLink();

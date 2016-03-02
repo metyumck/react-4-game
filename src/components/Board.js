@@ -11,7 +11,10 @@ class Board extends React.Component {
     super();
     this.state = {
       board: [],
-      playerView: 0
+      playerView: 0,
+      playerOneWins: false,
+      playerTwoWins: false,
+      boardEnabled: false
 
     }
   }
@@ -24,10 +27,89 @@ class Board extends React.Component {
       asArray: true
     });
 
-
-
+    var that = this;
+    this.base.listenTo('/boards/' + this.props.params.boardId + '/lastCellTaken', {
+      context: this,
+      then(data) {
+        if (data[0] == '1' && that.testWinConditions(data)) {
+          that.setState({
+            playerOneWins: true
+          });
+        } else if (data[0] == '2' && that.testWinConditions(data)) {
+          that.setState({
+            playerTwoWins: true
+          });
+        }
+        
+      }
+    });
   }
 
+  testWinConditions(lastCellTaken) {
+    var player = parseInt(lastCellTaken[0]);
+    var row = lastCellTaken[1] ? parseInt(lastCellTaken[1]) : 0 ;
+    var column = lastCellTaken[2] ? parseInt(lastCellTaken[2]) : 0 ;
+
+    //horizontal pattern, both ways
+    var h1 = false;
+    var h2 = false;
+
+    //vertical pattern, one way because you can only put a coin on top
+    var v1 = false;
+
+    //diagonal patterns, four ways becaue you CAN put a coin at the bottom of a diagonal
+    //d1 goes top to right, d2 top to left
+    //d3 goes bottom to right, d2 bottom to left
+    var d1 = false;
+    var d2 = false;
+    var d3 = false;
+    var d4 = false;
+
+    if (player != 0) {
+      h1 = (this.state.board[row]['column' + column] == player
+            && this.state.board[row]['column' + (column + 1)] == player
+            && this.state.board[row]['column' + (column + 2)] == player
+            && this.state.board[row]['column' + (column + 3)] == player);
+      h2 = (this.state.board[row]['column' + column] == player
+            && this.state.board[row]['column' + (column - 1)] == player
+            && this.state.board[row]['column' + (column - 2)] == player
+            && this.state.board[row]['column' + (column - 3)] == player);
+      //Only check if all the indices are valid i.e. it will break if you try to check row index 6
+      if (row < 3) {
+        v1 = (this.state.board[row]['column' + column] == player
+              && this.state.board[row + 1]['column' + (column)] == player
+              && this.state.board[row + 2]['column' + (column)] == player
+              && this.state.board[row + 3]['column' + (column)] == player);
+        d1 = (this.state.board[row]['column' + column] == player
+              && this.state.board[row + 1]['column' + (column + 1)] == player
+              && this.state.board[row + 2]['column' + (column + 2)] == player
+              && this.state.board[row + 3]['column' + (column + 3)] == player);
+        d2 = (this.state.board[row]['column' + column] == player
+              && this.state.board[row + 1]['column' + (column - 1)] == player
+              && this.state.board[row + 2]['column' + (column - 2)] == player
+              && this.state.board[row + 3]['column' + (column - 3)] == player);
+      }
+
+      if (row > 2) {
+        d3 = (this.state.board[row]['column' + column] == player
+              && this.state.board[row - 1]['column' + (column + 1)] == player
+              && this.state.board[row - 2]['column' + (column + 2)] == player
+              && this.state.board[row - 3]['column' + (column + 3)] == player);
+        d4 = (this.state.board[row]['column' + column] == player
+              && this.state.board[row - 1]['column' + (column - 1)] == player
+              && this.state.board[row - 2]['column' + (column - 2)] == player
+              && this.state.board[row - 3]['column' + (column - 3)] == player);
+      }
+
+
+    };
+    
+    console.log(h1,h2,v1,d1,d2,d3,d4);
+    return h1 || h2 || v1 || d1 || d2 || d3 || d4;
+  }
+
+
+  //this needs some serious reworkage, shouldn't need to click to confirm player view
   testPlayerView() {
     var hash;
     var that = this;
@@ -48,12 +130,7 @@ class Board extends React.Component {
         }
       })
     }); 
-  }
 
-
-  //deprecated in favour of a more simple method
-  testPlayerViewOld() {
-    
   }
 
   getRow(row, index) {
@@ -81,6 +158,16 @@ class Board extends React.Component {
           <ChooseColor boardid={this.props.params.boardId}/>
           <div className="react-4-board">
             {this.state.board.map(that.getRow, that)}
+          </div>
+        </div>
+        <div className="modal">
+          <input className="modal-state" checked={this.state.playerTwoWins ? "checked" : this.state.playerOneWins ? "checked" : null } id="modal-1" type="checkbox" />
+          <div className="modal-fade-screen">
+            <div className="modal-inner">
+              <div className="modal-close" htmlFor="modal-1"></div>
+              {this.state.playerTwoWins ? <h1 className="player-two-wins">Blue Player Wins</h1> : <h1 className="player-one-wins">Pink Player Wins</h1> }
+              <p className="modal-intro">Want to play again? <a href={window.location.toString().split('/board/')[0]}>Click here!</a></p>
+            </div>
           </div>
         </div>
       </div>
