@@ -14,7 +14,8 @@ class Board extends React.Component {
       playerView: 0,
       playerOneWins: false,
       playerTwoWins: false,
-      boardEnabled: false
+      boardEnabled: false,
+      currentTurn: 0
 
     }
   }
@@ -41,6 +42,19 @@ class Board extends React.Component {
           });
         }
         
+      }
+    });
+
+    this.base.listenTo('/boards/' + this.props.params.boardId + '/lockedToPlayer', {
+      context: this,
+      then(data) {
+        if (parseInt(data) > 0) {
+          that.setState({
+            boardEnabled: true,
+            currentTurn: parseInt(data)
+          });
+          that.testPlayerView();
+        }
       }
     });
   }
@@ -136,7 +150,7 @@ class Board extends React.Component {
   getRow(row, index) {
 
     return (
-      <div key={index} className='row' onClick={this.testPlayerView.bind(this)}>
+      <div key={index} className='row'>
         <BoardCell key={index + '1'} cellRow={index} cellOwner={row['column1']} cellColumn='1' board={this.props.params.boardId}/>
         <BoardCell key={index + '2'} cellRow={index} cellOwner={row['column2']} cellColumn='2' board={this.props.params.boardId}/>
         <BoardCell key={index + '3'} cellRow={index} cellOwner={row['column3']} cellColumn='3' board={this.props.params.boardId}/>
@@ -153,10 +167,10 @@ class Board extends React.Component {
     console.log(this.state.playerView);
     return (
       <div>
-        {this.state.playerView != 0 ? <div className={this.state.playerView == 1 ? 'player-info pink' : 'player-info blue'}></div> : null}
+        {this.state.playerView != 0 ? <div className={this.state.playerView == 1 ? 'player-info pink' : 'player-info blue'}>It is {this.state.currentTurn == 1 ? 'pink' : null }{this.state.currentTurn == 2 ? 'blue' : null } player&apos;s turn to move!</div> : null}
         <div className="board-container">
           <ChooseColor boardid={this.props.params.boardId}/>
-          <div className="react-4-board">
+          <div className={this.state.boardEnabled ? "react-4-board" : "hide"}>
             {this.state.board.map(that.getRow, that)}
           </div>
         </div>

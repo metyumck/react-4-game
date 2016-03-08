@@ -3,10 +3,13 @@ require('styles/Main.scss');
 
 import React from 'react';
 import { render } from 'react-dom';
-import { Router, Link, Route, browserHistory } from 'react-router';
+import { Router, Link, Route, useRouterHistory } from 'react-router';
+import { createHashHistory } from 'history';
 
 import GenerateBoard from './GenerateBoard.js';
 import Board from './Board.js';
+
+const appHistory = useRouterHistory(createHashHistory)({ queryKey: false });
 
 
 class AppComponent extends React.Component {
@@ -23,7 +26,7 @@ class AppComponent extends React.Component {
 }
 
 render((
-  <Router history={browserHistory}>
+  <Router history={appHistory}>
     <Route path="/" component={GenerateBoard} />
     <Route path="/board/:boardId" component={Board} />
   </Router>

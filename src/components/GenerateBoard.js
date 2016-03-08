@@ -88,7 +88,6 @@ class GenerateBoard extends React.Component {
     this.setState({generatedBoard: this.base.push('/boards', {
         data: {
           board: this.defaultBoard,
-          linkSent: false,
           players: {
             playerone: false,
             playertwo: false

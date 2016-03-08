@@ -66,6 +66,7 @@ img {
 .player-info {
   height:60px;
   text-align: center;
+  padding:20px;
 }
 
 .player-info.blue {
@@ -83,7 +84,7 @@ img {
   }
   div {
     text-align: center;
-    @include span-columns(6);
+    @include span-columns(12);
     h2 {
       background-color:#e0e0e0;
       display:inline-block;
@@ -467,6 +468,7 @@ $base-timing: ease;
     padding: $modal-padding / 2;
     position: relative;
     width: 95%;
+    text-align: center;
 
     @include media($medium-screen) {
       max-height: 70%;
@@ -479,8 +481,7 @@ $base-timing: ease;
     }
 
     h1 {
-      color: $base-font-color;
-      text-align: left;
+      text-align: center;
       text-transform: capitalize;
     }
 
