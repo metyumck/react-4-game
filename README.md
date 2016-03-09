@@ -3,10 +3,4 @@
 
 ## How do I play?
 
-(Full game features currently unfinished)
-
-- For the moment, clone the repository, run npm install, then npm run serve
-- Click the "Make me a board" button
-- To test, send the link to another browser on your computer or network.
-- The game will wait till you and your friend pick colours and then...
-- Play!
+Go to http://metyu-mck.com/reakt-four#/ and click the "Make me a board!" button. Once you have done that, a link will be generated which you can send to someone that you want to play with. 
